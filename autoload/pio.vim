@@ -15,8 +15,8 @@ function! pio#SetMaps()
     nnoremap <leader>au :ProjectRootExe exec("!platformio run -e".pio#GetPioEnv()." -t upload")<CR>
     function! OpenSerial()
         :vs | te
-        :call jobsend(s:terminal_job_id, "cd ".g:pio_root." && clear\n")
-        :call jobsend(s:terminal_job_id, "platformio device monitor\n")
+        :call jobsend(b:terminal_job_id, "cd ".g:pio_root." && clear\n")
+        :call jobsend(b:terminal_job_id, "platformio device monitor\n")
     endfunction
     nnoremap <leader>as :call OpenSerial()<CR>
     nnoremap <leader>ac :call pio#InputPioEnv()<CR>
