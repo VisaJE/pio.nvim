@@ -23,8 +23,9 @@ function! pio#SetMaps()
     nnoremap <leader>ac :call pio#InputPioEnv()<CR>
 endfunction
 
-function! pio#InitPlatformioProject(project_root)
+function! pio#InitPlatformioProject(project_root, onPioCallback)
     if (filereadable(a:project_root.'/platformio.ini'))
+        execute(a:onPioCallback)
         let g:pio_root = a:project_root
         let g:statusextra = "[PIO] "
         call SetStatusLine()
