@@ -1,5 +1,7 @@
 function! pio#InputPioEnv()
     let g:pio_env=input("Platformio environment: ")
+    let g:statusextra = "[PIO] \uf06c ".g:pio_env." "
+    call SetStatusLine()
 endfunction
 
 function! pio#GetPioEnv()
@@ -24,6 +26,8 @@ endfunction
 function! pio#InitPlatformioProject(project_root)
     if (filereadable(a:project_root.'/platformio.ini'))
         let g:pio_root = a:project_root
+        let g:statusextra = "[PIO] "
+        call SetStatusLine()
         call pio#SetMaps()
     endif
 endfunction
