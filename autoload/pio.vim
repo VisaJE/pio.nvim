@@ -27,7 +27,7 @@ endfunction
 
 function! pio#OpenSerial()
     :vs | te
-    :call jobsend(s:terminal_job_id, "cd ".g:pio_root." && clear\n")
+    :call jobsend(b:terminal_job_id, "cd ".g:pio_root." && clear\n")
     :call jobsend(b:terminal_job_id, "platformio device monitor\n")
 endfunction
 
