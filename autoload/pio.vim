@@ -3,11 +3,16 @@ function! pio#InputPioEnv()
     execute(s:pio_callback)
 endfunction
 
+function! pio#AddExtraFlags(flags)
+    let s:extra_flags = s:extra_flags." ".a:flags 
+endfunction
+
 function pio#PioFlags()
     let s:flags=" -e".pio#GetPioEnv()
     if (g:pio_verbose)
         let s:flags=s:flags." --verbose"
     endif
+    let s:flags=s:flags." ".s:extra_flags
     return s:flags
 endfunction
 
@@ -34,6 +39,7 @@ endfunction
 function! pio#InitPlatformioProject(project_root, onPioCallback)
     if (filereadable(a:project_root.'/platformio.ini'))
         let g:pio_verbose = 0
+        let s:extra_flags = ""
         let g:pio_root = a:project_root
         let s:pio_callback = a:onPioCallback
         execute(s:pio_callback)

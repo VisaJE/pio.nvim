@@ -2,14 +2,17 @@
 This plugin defines some convenient functions for platformio projects.
 
 ## An example of vimrc:
-`function! SetPioMaps()
+`
+let g:rootmarkers=['platformio.ini', '.projectroot','.git','.hg',...]
+
+function! SetPioMaps()
     nnoremap <leader>av :call pio#Verify()<CR>
     nnoremap <leader>au :call pio#Upload()<CR>
     nnoremap <leader>as :call pio#OpenSerial()<CR>
     nnoremap <leader>ac :call pio#InputPioEnv()<CR>
 endfunction
 
-autocmd FileType cpp,ino call pio#InitPlatformioProject(projectroot#guess(), "call SetPioMaps() | call SetTabWidth(2) | call UpdateStatus()")
+autocmd FileType cpp,ino call pio#InitPlatformioProject(projectroot#guess(), "call SetPioMaps() | OtherFun()...")
 `
 
 ## Setup
