@@ -4,7 +4,7 @@ function! pio#InputPioEnv()
 endfunction
 
 function! pio#AddExtraFlags(flags)
-    let s:extra_flags = s:extra_flags." ".a:flags 
+    let s:extra_flags = s:extra_flags." ".a:flags
 endfunction
 
 function pio#PioFlags()
@@ -24,10 +24,10 @@ function! pio#GetPioEnv()
 endfunction
 
 function! pio#Verify()
-    ProjectRootExe exec("!platformio run".pio#PioFlags())
+    ProjectRootExe exec("!".g:pio_executable." run".pio#PioFlags())
 endfunction
 function! pio#Upload()
-    ProjectRootExe exec("!platformio run".pio#PioFlags()." -t upload")
+    ProjectRootExe exec("!".g:pio_executable." run".pio#PioFlags()." -t upload")
 endfunction
 
 function! pio#OpenSerial()
@@ -38,6 +38,13 @@ endfunction
 
 function! pio#InitPlatformioProject(project_root, onPioCallback)
     if (filereadable(a:project_root.'/platformio.ini'))
+        if (!exists("g:pio_executable"))
+            if (exists("g:python3_host_prog"))
+                let g:pio_executable = g:python3_host_prog." -m platformio"
+            else
+                let g:pio_executable = "platformio"
+            endif
+        endif
         let g:pio_verbose = 0
         let s:extra_flags = ""
         let g:pio_root = a:project_root
