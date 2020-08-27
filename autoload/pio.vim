@@ -31,9 +31,14 @@ function! pio#Upload()
 endfunction
 
 function! pio#OpenSerial()
-    :vs | te
-    :call jobsend(b:terminal_job_id, "cd ".g:pio_root." && clear\n")
-    :call jobsend(b:terminal_job_id, "platformio device monitor\n")
+    vs | te
+    if has("unix")
+        call jobsend(b:terminal_job_id, "cd ".g:pio_root." && clear\n")
+        call jobsend(b:terminal_job_id, g:pio_executable." device monitor\n")
+    else
+        call jobsend(b:terminal_job_id, "Cd ".g:pio_root."\r")
+        call jobsend(b:terminal_job_id, g:pio_executable." device monitor\r")
+    endif
 endfunction
 
 function! pio#InitPlatformioProject(project_root, onPioCallback)
