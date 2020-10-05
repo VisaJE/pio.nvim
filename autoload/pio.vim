@@ -7,6 +7,10 @@ function! pio#AddExtraFlags(flags)
     let s:extra_flags = s:extra_flags." ".a:flags
 endfunction
 
+function! pio#ClearExtraFlags(flags)
+    let s:extra_flags = ""
+endfunction
+
 function pio#PioFlags()
     let s:flags=" -e".pio#GetPioEnv()
     if (g:pio_verbose)
@@ -21,6 +25,10 @@ function! pio#GetPioEnv()
          call pio#InputPioEnv()
     endif
     return g:pio_env
+endfunction
+
+function! pio#CompileDb()
+    ProjectRootExe exec("!".g:pio_executable." run".pio#PioFlags(). " -tcompiledb")
 endfunction
 
 function! pio#Verify()
