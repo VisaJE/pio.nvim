@@ -12,7 +12,11 @@ function! pio#ClearExtraFlags(flags)
 endfunction
 
 function pio#PioFlags()
-    let s:flags=" -e".pio#GetPioEnv()
+    let s:env=pio#GetPioEnv()
+    let s:flags=""
+    if (s:env != "")
+        let s:flags=s:flags." -e".s:env
+    endif
     if (g:pio_verbose)
         let s:flags=s:flags." --verbose"
     endif
