@@ -94,15 +94,44 @@ function pio#SerialFlags()
     return s:flags
 endfunction
 
+function! pio#CreateMakefile()
+    if filereadable('Makefile')
+        exe '!rm Makefile'
+    endif
+    let data=[
+        \ "# CREATED BY PIO.NVIM",
+        \ "all:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#VerifyFlags(),
+        \ "",
+        \ "upload:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#UploadFlags()." -t upload",
+        \ "",
+        \ "clean:",
+        \ "\t".g:pio_executable." -f -c vim run -t clean",
+        \ "",
+        \ "program:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#UploadFlags()." -t program",
+        \ "",
+        \ "uploadfs:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#UploadFlags()." -t uploadfs",
+        \ ]
+    if writefile(data, 'Makefile')
+        echomsg 'write error'
+        return 1
+    endif
+    return 0
+endfunction
+
 function! pio#CompileDb()
     ProjectRootExe exec("!".g:pio_executable." run".pio#DbFlags(). " -tcompiledb")
 endfunction
 
 function! pio#Verify()
-    ProjectRootExe exec("!".g:pio_executable." run".pio#VerifyFlags())
+    ProjectRootExe exec("call pio#CreateMakefile() || !make")
 endfunction
+
 function! pio#Upload()
-    ProjectRootExe exec("!".g:pio_executable." run".pio#UploadFlags()." -t upload")
+    ProjectRootExe exec("call pio#CreateMakefile() || !make upload")
 endfunction
 
 function! pio#OpenSerial()
