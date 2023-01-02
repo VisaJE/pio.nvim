@@ -17,9 +17,6 @@ function pio#PioFlags()
     if (s:env != "")
         let s:flags=s:flags." -e".s:env
     endif
-    if (g:pio_verbose)
-        let s:flags=s:flags." --verbose"
-    endif
     let s:flags=s:flags." ".s:extra_flags
     return s:flags
 endfunction
@@ -31,15 +28,44 @@ function! pio#GetPioEnv()
     return g:pio_env
 endfunction
 
+function! pio#CreateMakefile()
+    if filereadable('Makefile')
+        exe '!rm Makefile'
+    endif
+    let data=[
+        \ "# CREATED BY PIO.NVIM",
+        \ "all:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#PioFlags(),
+        \ "",
+        \ "upload:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#PioFlags()." -t upload",
+        \ "",
+        \ "clean:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#PioFlags()." -t clean",
+        \ "",
+        \ "program:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#PioFlags()." -t program",
+        \ "",
+        \ "uploadfs:",
+        \ "\t".g:pio_executable." -f -c vim run".pio#PioFlags()." -t uploadfs",
+        \ ]
+    if writefile(data, 'Makefile')
+        echomsg 'write error'
+        return 1
+    endif
+    return 0
+endfunction
+
 function! pio#CompileDb()
     ProjectRootExe exec("!".g:pio_executable." run".pio#PioFlags(). " -tcompiledb")
 endfunction
 
 function! pio#Verify()
-    ProjectRootExe exec("!".g:pio_executable." run".pio#PioFlags())
+    ProjectRootExe exec("call pio#CreateMakefile() || !make")
 endfunction
+
 function! pio#Upload()
-    ProjectRootExe exec("!".g:pio_executable." run".pio#PioFlags()." -t upload")
+    ProjectRootExe exec("call pio#CreateMakefile() || !make upload")
 endfunction
 
 function! pio#OpenSerial()
@@ -62,7 +88,6 @@ function! pio#InitPlatformioProject(project_root, onPioCallback)
                 let g:pio_executable = "platformio"
             endif
         endif
-        let g:pio_verbose = 0
         let s:extra_flags = ""
         let g:pio_root = a:project_root
         let s:pio_callback = a:onPioCallback
