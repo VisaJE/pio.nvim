@@ -144,23 +144,3 @@ function! pio#OpenSerial()
         call jobsend(b:terminal_job_id, g:pio_executable." device monitor".pio#SerialFlags()."\r")
     endif
 endfunction
-
-" Needs to be called in vimrc to detect platformio projects
-function! pio#InitPlugin(onPioCallback)
-    let project_root=projectroot#guess()
-    if (filereadable(project_root.'/platformio.ini'))
-        if (!exists("g:pio_executable"))
-            if (exists("g:python3_host_prog"))
-                let g:pio_executable = g:python3_host_prog." -m platformio"
-            else
-                let g:pio_executable = "platformio"
-            endif
-        endif
-        let s:extra_flags = ""
-        let g:pio_root = project_root
-        let s:pio_callback = a:onPioCallback
-        let g:pio_env=""
-        let g:pio_port=""
-        execute(s:pio_callback)
-    endif
-endfunction
