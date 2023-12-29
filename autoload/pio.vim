@@ -48,11 +48,11 @@ endfunction
 
 " Additional options for all commands
 function! pio#AddExtraFlags(flags)
-    let s:extra_flags = s:extra_flags." ".a:flags
+    let g:pio_extra_flags = g:pio_extra_flags." ".a:flags
 endfunction
 
 function! pio#ClearExtraFlags(flags)
-    let s:extra_flags = ""
+    let g:pio_extra_flags = ""
 endfunction
 
 function pio#DbFlags()
@@ -60,7 +60,7 @@ function pio#DbFlags()
     if (g:pio_env != "")
         let s:flags=s:flags." -e".g:pio_env
     endif
-    let s:flags=s:flags." ".s:extra_flags
+    let s:flags=s:flags." ".g:pio_extra_flags
     return s:flags
 endfunction
 
@@ -69,7 +69,7 @@ function pio#VerifyFlags()
     if (g:pio_env != "")
         let s:flags=s:flags." -e".g:pio_env
     endif
-    let s:flags=s:flags." ".s:extra_flags
+    let s:flags=s:flags." ".g:pio_extra_flags
     return s:flags
 endfunction
 
@@ -81,7 +81,7 @@ function pio#UploadFlags()
     if (g:pio_port != "")
         let s:flags=s:flags." --upload-port ".g:pio_port
     endif
-    let s:flags=s:flags." ".s:extra_flags
+    let s:flags=s:flags." ".g:pio_extra_flags
     return s:flags
 endfunction
 
@@ -90,7 +90,7 @@ function pio#SerialFlags()
     if (g:pio_port != "")
         let s:flags=s:flags." --port ".g:pio_port
     endif
-    let s:flags=s:flags." ".s:extra_flags
+    let s:flags=s:flags." ".g:pio_extra_flags
     return s:flags
 endfunction
 
