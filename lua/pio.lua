@@ -142,7 +142,7 @@ end
 local set_active = function(root)
 	if projects[root] then
 		M.active_project = projects[root]
-        M.active_project.pio_on_update(M.active_project)
+		M.active_project.pio_on_update(M.active_project)
 	end
 end
 
@@ -161,6 +161,9 @@ function PioCreateMakefile()
 		"",
 		"upload:",
 		"\t" .. vim.g.pio_executable .. " -f -c vim run" .. pio_upload_flags() .. " -t upload",
+		"uploadnobuild:",
+		"\t" .. vim.g.pio_executable .. " -f -c vim run" .. pio_upload_flags() .. " -t upload -t nobuild",
+		"",
 		"",
 		"clean:",
 		"\t" .. vim.g.pio_executable .. " -f -c vim run -t clean",
@@ -201,6 +204,11 @@ end
 function PioUpload()
 	vim.fn.ProjectRootExe({ "lua PioCreateMakefile()" })
 	vim.fn.ProjectRootExe({ "!make upload" })
+end
+
+function PioUploadNoBuild()
+	vim.fn.ProjectRootExe({ "lua PioCreateMakefile()" })
+	vim.fn.ProjectRootExe({ "!make uploadnobuild" })
 end
 
 function PioOpenSerial()
