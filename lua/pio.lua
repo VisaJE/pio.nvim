@@ -59,7 +59,7 @@ end
 
 -- Show a buffer to select environment
 function PioSelectEnv()
-	run_function_in_root(pio_show_select, "Environment", " project config | grep env:", pio_set_env)
+	run_function_in_root(pio_show_select, "Environment", " project config | grep ^env:", pio_set_env)
 end
 
 local pio_set_port = function(port)
