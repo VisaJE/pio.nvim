@@ -120,7 +120,9 @@ local pio_serial_flags = function()
 		flags = flags .. " --port " .. M.active_project.pio_port
 	end
 	flags = flags .. " " .. M.active_project.pio_extra_flags
-	flags = flags .. " -e" .. M.active_project.pio_env
+	if M.active_project.pio_env ~= "" then
+		flags = flags .. " -e" .. M.active_project.pio_env
+	end
 	return flags
 end
 
